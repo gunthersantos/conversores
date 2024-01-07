@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      input {
+        width: 100px;
+        margin-bottom: 10px;
+      }
+
+      select {
+        margin-bottom: 10px;
+      }
+
+      button {
+        padding: 8px;
+        cursor: pointer;
+      }
+
+      #result {
+        margin-top: 20px;
+      }
+    </style>
+    <title>Conversor</title>
+  </head>
+  <body>
+    <h1>Conversor</h1>
+
+    <div>
+      <label for="tipoConversao">Escolha o tipo de conversão:</label>
+      <select id="tipoConversao" onchange="mostrarOpcoes()">
+        <option value="" disabled selected>Selecione</option>
+        <option value="temperatura">Temperatura</option>
+        <option value="peso">Peso</option>
+        <option value="tamanho">Tamanho</option>
+      </select>
+    </div>
+
+    <div id="opcoesConversao" style="display: none">
+      <label for="direcaoConversao">Escolha a direção da conversão:</label>
+      <select id="direcaoConversao"></select>
+    </div>
+
+    <div>
+      <label for="valor">Valor:</label>
+      <input type="text" id="valor" />
+    </div>
+
+    <button onclick="converter()">Converter</button>
+
+    <div id="result"></div>
+
+    <script>
+      function mostrarOpcoes() {
+        var tipoConversao = document.getElementById('tipoConversao').value;
+        var direcaoConversaoDropdown =
+          document.getElementById('direcaoConversao');
+
+        // Limpar opções existentes
+        direcaoConversaoDropdown.innerHTML = '';
+
+        switch (tipoConversao) {
+          case 'temperatura':
+            direcaoConversaoDropdown.innerHTML +=
+              '<option value="celsiusToFahrenheit">Celsius para Fahrenheit</option>';
+            direcaoConversaoDropdown.innerHTML +=
+              '<option value="fahrenheitToCelsius">Fahrenheit para Celsius</option>';
+            break;
+          case 'peso':
+            direcaoConversaoDropdown.innerHTML +=
+              '<option value="kgToLibras">Quilogramas para Libras</option>';
+            direcaoConversaoDropdown.innerHTML +=
+              '<option value="librasToKg">Libras para Quilogramas</option>';
+            break;
+          case 'tamanho':
+            direcaoConversaoDropdown.innerHTML +=
+              '<option value="cmToInch">Centímetros para Polegadas</option>';
+            direcaoConversaoDropdown.innerHTML +=
+              '<option value="inchToCm">Polegadas para Centímetros</option>';
+            break;
+        }
+
+        // Exibir as opções de conversão
+        document.getElementById('opcoesConversao').style.display = 'block';
+      }
+
+      function converter() {
+        var tipoConversao = document.getElementById('tipoConversao').value;
+        var direcaoConversao =
+          document.getElementById('direcaoConversao').value;
+        var valor = parseFloat(document.getElementById('valor').value);
+
+        switch (direcaoConversao) {
+          case 'celsiusToFahrenheit':
+            converterTemperatura(
+              valor,
+              'Celsius para Fahrenheit',
+              (celsius) => (celsius * 9) / 5 + 32
+            );
+            break;
+          case 'fahrenheitToCelsius':
+            converterTemperatura(
+              valor,
+              'Fahrenheit para Celsius',
+              (fahrenheit) => ((fahrenheit - 32) * 5) / 9
+            );
+            break;
+          case 'kgToLibras':
+            converterPeso(
+              valor,
+              'Quilogramas para Libras',
+              (kg) => kg * 2.20462
+            );
+            break;
+          case 'librasToKg':
+            converterPeso(
+              valor,
+              'Libras para Quilogramas',
+              (libras) => libras / 2.20462
+            );
+            break;
+          case 'cmToInch':
+            converterTamanho(
+              valor,
+              'Centímetros para Polegadas',
+              (cm) => cm / 2.54
+            );
+            break;
+          case 'inchToCm':
+            converterTamanho(
+              valor,
+              'Polegadas para Centímetros',
+              (inch) => inch * 2.54
+            );
+            break;
+          default:
+            alert('Escolha uma direção de conversão válida.');
+        }
+      }
+
+      function converterTemperatura(valor, label, formula) {
+        var resultado = formula(valor);
+        exibirResultado(label, resultado.toFixed(2));
+      }
+
+      function converterPeso(valor, label, formula) {
+        var resultado = formula(valor);
+        exibirResultado(label, resultado.toFixed(2));
+      }
+
+      function converterTamanho(valor, label, formula) {
+        var resultado = formula(valor);
+        exibirResultado(label, resultado.toFixed(2));
+      }
+
+      function exibirResultado(label, resultado) {
+        document.getElementById('result').innerText = label + ': ' + resultado;
+      }
+    </script>
+  </body>
+</html>
